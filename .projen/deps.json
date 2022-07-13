@@ -45,17 +45,16 @@
       "type": "build"
     },
     {
+      "name": "jest",
+      "type": "build"
+    },
+    {
       "name": "jest-aws-client-mock",
       "type": "build"
     },
     {
       "name": "jest-junit",
       "version": "^13",
-      "type": "build"
-    },
-    {
-      "name": "jest",
-      "version": "^27",
       "type": "build"
     },
     {
@@ -78,7 +77,6 @@
     },
     {
       "name": "ts-jest",
-      "version": "^27",
       "type": "build"
     },
     {
