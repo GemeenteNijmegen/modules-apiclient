@@ -14,7 +14,8 @@ const project = new typescript.TypeScriptProject({
   deps: [
     '@aws-sdk/client-secrets-manager',
     '@aws-sdk/client-ssm',
-    'axios',
+    'axios@^0.27', // TODO upgrade when this is fixed https://github.com/axios/axios/issues/5000
+    'aws4-axios',
   ], /* Runtime dependencies of this module. */
   // description: undefined,  /* The description is just a string that helps people understand the purpose of the package. */
   devDeps: [

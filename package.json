@@ -45,7 +45,8 @@
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "^3.105.0",
     "@aws-sdk/client-ssm": "^3.105.0",
-    "axios": "^0.27.2"
+    "aws4-axios": "^2.4.9",
+    "axios": "^0.27"
   },
   "main": "lib/index.js",
   "license": "EUPL-1.2",
