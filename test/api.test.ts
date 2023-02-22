@@ -95,8 +95,7 @@ describe('Init', () => {
   });
 });
 
-
-describe('Requests', () => {
+describe('postData Requests', () => {
   test('Return data', async () => {
     //required env params:
     testSetup();
@@ -105,7 +104,7 @@ describe('Requests', () => {
 
     const apiClient = new ApiClient();
     await apiClient.init();
-    const data = await apiClient.requestData('/test', { data: 'test ' });
+    const data = await apiClient.postData('/test', { data: 'test ' });
     expect(data).toEqual(returnData);
   });
 
@@ -117,11 +116,11 @@ describe('Requests', () => {
     const apiClient = new ApiClient();
     await apiClient.init();
     return expect(async() => {
-      await apiClient.requestData('/test', { data: 'test ' });
+      await apiClient.postData('/test', { data: 'test ' });
     }).rejects.toThrow();
     let result: any;
     try {
-      await apiClient.requestData('/test', { data: 'test ' });
+      await apiClient.postData('/test', { data: 'test ' });
     } catch (error) {
       result = error;
     }
@@ -136,17 +135,122 @@ describe('Requests', () => {
     const apiClient = new ApiClient();
     await apiClient.init();
     return expect(async() => {
-      await apiClient.requestData('/test', { data: 'test ' });
+      await apiClient.postData('/test', { data: 'test ' });
     }).rejects.toThrow();
     let result: any;
     try {
-      await apiClient.requestData('/test', { data: 'test ' });
+      await apiClient.postData('/test', { data: 'test ' });
     } catch (error) {
       result = error;
     }
     expect(result.message).toBe('Het ophalen van gegevens is misgegaan.');
   });
 });
+
+describe('Deprecated requestData Requests', () => {
+  test('Return data', async () => {
+    //required env params:
+    testSetup();
+    const returnData = { users: [{ id: 1, name: 'John Smith' }] };
+    axiosMock.onPost('/test').reply(200, returnData);
+
+    const apiClient = new ApiClient();
+    await apiClient.init();
+    const data = await apiClient.postData('/test', { data: 'test ' });
+    expect(data).toEqual(returnData);
+  });
+
+  test('Timeout', async () => {
+    //required env params:
+    testSetup();
+    axiosMock.onPost('/test').timeout();
+
+    const apiClient = new ApiClient();
+    await apiClient.init();
+    return expect(async() => {
+      await apiClient.postData('/test', { data: 'test ' });
+    }).rejects.toThrow();
+    let result: any;
+    try {
+      await apiClient.postData('/test', { data: 'test ' });
+    } catch (error) {
+      result = error;
+    }
+    expect(result.message).toBe('Het ophalen van gegevens is misgegaan.');
+  });
+
+  test('Network error', async () => {
+    //required env params:
+    testSetup();
+    axiosMock.onPost('/test').networkError();
+
+    const apiClient = new ApiClient();
+    await apiClient.init();
+    return expect(async() => {
+      await apiClient.postData('/test', { data: 'test ' });
+    }).rejects.toThrow();
+    let result: any;
+    try {
+      await apiClient.postData('/test', { data: 'test ' });
+    } catch (error) {
+      result = error;
+    }
+    expect(result.message).toBe('Het ophalen van gegevens is misgegaan.');
+  });
+});
+
+describe('GET Requests', () => {
+  test('Return data', async () => {
+    //required env params:
+    testSetup();
+    const returnData = { users: [{ id: 1, name: 'John Smith' }] };
+    axiosMock.onGet('/test').reply(200, returnData);
+
+    const apiClient = new ApiClient();
+    await apiClient.init();
+    const data = await apiClient.getData('/test');
+    expect(data).toEqual(returnData);
+  });
+
+  test('Timeout', async () => {
+    //required env params:
+    testSetup();
+    axiosMock.onGet('/test').timeout();
+
+    const apiClient = new ApiClient();
+    await apiClient.init();
+    return expect(async() => {
+      await apiClient.getData('/test');
+    }).rejects.toThrow();
+    let result: any;
+    try {
+      await apiClient.getData('/test', { data: 'test ' });
+    } catch (error) {
+      result = error;
+    }
+    expect(result.message).toBe('Het ophalen van gegevens is misgegaan.');
+  });
+
+  test('Network error', async () => {
+    //required env params:
+    testSetup();
+    axiosMock.onGet('/test').networkError();
+
+    const apiClient = new ApiClient();
+    await apiClient.init();
+    return expect(async() => {
+      await apiClient.getData('/test', { data: 'test ' });
+    }).rejects.toThrow();
+    let result: any;
+    try {
+      await apiClient.getData('/test', { data: 'test ' });
+    } catch (error) {
+      result = error;
+    }
+    expect(result.message).toBe('Het ophalen van gegevens is misgegaan.');
+  });
+});
+
 
 
 function testSetup() {

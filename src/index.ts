@@ -79,20 +79,19 @@ export class ApiClient {
 
   /**
    * Request data from the API.
+   * 
+   * @deprecated This method always performs a POST request. The `postData()` method is 
+   * a drop-in replacement for requestData. For get, use `getData()`.
+   * 
    * @returns {string} api response
    */
   async requestData(endpoint: string, body: any, headers?: any): Promise<any> {
-    if (!this.cert || !this.ca) {
-      await this.init();
-    }
-    if (!this.cert || !this.ca) {
-      return Error('Error setting cert or CA');
-    }
+    return await this.postData(endpoint, body, headers);
+  }
+
+  async postData(endpoint: string, body: any, headers?: any): Promise<any> {
+    const httpsAgent = await this.setupAgent();
     console.time('request to ' + endpoint);
-    const key = await this.getPrivateKey();
-    const cert = this.cert;
-    const ca = this.ca;
-    const httpsAgent = new https.Agent({ cert, key, ca });
     try {
       const response = await axios.post(endpoint, body, {
         httpsAgent: httpsAgent,
@@ -103,26 +102,61 @@ export class ApiClient {
       return response.data;
     } catch (error: any | AxiosError) {
       console.timeEnd('request to ' + endpoint);
-      if (axios.isAxiosError(error)) {
-        if (error.response) {
-          // The request was made and the server responded with a status code
-          // that falls out of the range of 2xx
-          console.log('http status for ' + endpoint + ': ' + error.response.status);
+      this.handleErrors(error, endpoint);
+    }
+  }
 
-        } else if (error.request) {
-          // The request was made but no response was received
-          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-          // http.ClientRequest in node.js
-          console.error(error?.code);
-        } else {
-          // Something happened in setting up the request that triggered an Error
-          console.error(error.message);
-        }
+  async getData(endpoint: string, headers?: any): Promise<any> {
+    const httpsAgent = this.setupAgent();
+    console.time('GET request to ' + endpoint);
+    try {
+      const response = await axios.get(endpoint, {
+        httpsAgent: httpsAgent,
+        headers,
+        timeout: 2000,
+      });
+      console.timeEnd('GET request to ' + endpoint);
+      return response.data;
+    } catch (error: any | AxiosError) {
+      console.timeEnd('GET request to ' + endpoint);
+      this.handleErrors(error, endpoint);
+    }
+  }
+
+  private handleErrors(error: any, endpoint: string) {
+    if (axios.isAxiosError(error)) {
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.log('http status for ' + endpoint + ': ' + error.response.status);
+
+      } else if (error.request) {
+        // The request was made but no response was received
+        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+        // http.ClientRequest in node.js
+        console.error(error?.code);
       } else {
+        // Something happened in setting up the request that triggered an Error
         console.error(error.message);
       }
-
-      throw new Error('Het ophalen van gegevens is misgegaan.');
+    } else {
+      console.error(error.message);
     }
+
+    throw new Error('Het ophalen van gegevens is misgegaan.');
+  }
+
+  async setupAgent() {
+    if (!this.cert || !this.ca) {
+      await this.init();
+    }
+    if (!this.cert || !this.ca) {
+      throw Error('Error setting cert or CA');
+    }
+    const key = await this.getPrivateKey();
+    const cert = this.cert;
+    const ca = this.ca;
+    const httpsAgent = new https.Agent({ cert, key, ca });
+    return httpsAgent;
   }
 }
