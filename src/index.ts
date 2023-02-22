@@ -79,14 +79,14 @@ export class ApiClient {
 
   /**
    * Request data from the API.
-   *
-   * @deprecated This method always performs a POST request. The `postData()` method is
+   * 
+   * @deprecated This method always performs a POST request. The `postData()` method is 
    * a drop-in replacement for requestData. For get, use `getData()`.
-   *
+   * 
    * @returns {string} api response
    */
   async requestData(endpoint: string, body: any, headers?: any): Promise<any> {
-    return this.postData(endpoint, body, headers);
+    return await this.postData(endpoint, body, headers);
   }
 
   async postData(endpoint: string, body: any, headers?: any): Promise<any> {
