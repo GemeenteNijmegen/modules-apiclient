@@ -252,7 +252,6 @@ describe('GET Requests', () => {
 });
 
 
-
 function testSetup() {
   process.env.MTLS_PRIVATE_KEY_ARN = 'testarn';
 
