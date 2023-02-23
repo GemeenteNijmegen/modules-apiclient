@@ -107,7 +107,7 @@ export class ApiClient {
   }
 
   async getData(endpoint: string, headers?: any): Promise<any> {
-    const httpsAgent = this.setupAgent();
+    const httpsAgent = await this.setupAgent();
     console.time('GET request to ' + endpoint);
     try {
       const response = await axios.get(endpoint, {
