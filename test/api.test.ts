@@ -115,7 +115,7 @@ describe('postData Requests', () => {
 
     const apiClient = new ApiClient();
     await apiClient.init();
-    return expect(async() => {
+    await expect(async() => {
       await apiClient.postData('/test', { data: 'test ' });
     }).rejects.toThrow();
     let result: any;
@@ -134,7 +134,7 @@ describe('postData Requests', () => {
 
     const apiClient = new ApiClient();
     await apiClient.init();
-    return expect(async() => {
+    await expect(async() => {
       await apiClient.postData('/test', { data: 'test ' });
     }).rejects.toThrow();
     let result: any;
@@ -167,7 +167,7 @@ describe('Deprecated requestData Requests', () => {
 
     const apiClient = new ApiClient();
     await apiClient.init();
-    return expect(async() => {
+    await expect(async() => {
       await apiClient.postData('/test', { data: 'test ' });
     }).rejects.toThrow();
     let result: any;
@@ -186,7 +186,7 @@ describe('Deprecated requestData Requests', () => {
 
     const apiClient = new ApiClient();
     await apiClient.init();
-    return expect(async() => {
+    await expect(async() => {
       await apiClient.postData('/test', { data: 'test ' });
     }).rejects.toThrow();
     let result: any;
@@ -219,7 +219,7 @@ describe('GET Requests', () => {
 
     const apiClient = new ApiClient();
     await apiClient.init();
-    return expect(async() => {
+    await expect(async() => {
       await apiClient.getData('/test');
     }).rejects.toThrow();
     let result: any;
@@ -238,7 +238,7 @@ describe('GET Requests', () => {
 
     const apiClient = new ApiClient();
     await apiClient.init();
-    return expect(async() => {
+    await expect(async() => {
       await apiClient.getData('/test', { data: 'test ' });
     }).rejects.toThrow();
     let result: any;
