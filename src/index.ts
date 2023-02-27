@@ -9,6 +9,7 @@ export class ApiClient {
   private caname: string | undefined;
   private cert: string | undefined;
   private ca: string | undefined;
+  private timeout: number = 2000;
   /**
    * Connects to API's. Use .requestData() to get the actual info
    *
@@ -22,6 +23,10 @@ export class ApiClient {
     this.ca = ca;
     this.certname = process.env.MTLS_CLIENT_CERT_NAME ?? undefined;
     this.caname = process.env.MTLS_ROOT_CA_NAME ?? undefined;
+  }
+
+  setTimeout(timeout: number) {
+    this.timeout = timeout;
   }
 
   /**
@@ -96,7 +101,7 @@ export class ApiClient {
       const response = await axios.post(endpoint, body, {
         httpsAgent: httpsAgent,
         headers,
-        timeout: 2000,
+        timeout: this.timeout,
       });
       console.timeEnd('request to ' + endpoint);
       return response.data;
@@ -113,7 +118,7 @@ export class ApiClient {
       const response = await axios.get(endpoint, {
         httpsAgent: httpsAgent,
         headers,
-        timeout: 2000,
+        timeout: this.timeout,
       });
       console.timeEnd('GET request to ' + endpoint);
       return response.data;
