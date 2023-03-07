@@ -22,7 +22,7 @@ const project = new GemeenteNijmegenTsPackage({
     'jest-aws-client-mock',
     '@gemeentenijmegen/projen-project-type',
   ],
-  packageName: projectName, 
+  packageName: projectName,
   enableAutoMergeDependencies: false, // No acceptance branche
 });
 project.synth();
