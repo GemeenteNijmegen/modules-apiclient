@@ -40,7 +40,7 @@ export class ApiClient {
   setTimeout(timeout: number) {
     this.timeout = timeout;
   }
-  
+
   /**
    * Init key, cert and ca. If you do not init, you can pass them in the constructor, or
    * they will be lazily initialized in the first requestData call
