@@ -6,9 +6,12 @@ import * as Dotenv from 'dotenv';
 import { mockClient } from 'jest-aws-client-mock';
 import { ApiClient } from '../src';
 
+const axiosInstance = axios.create();
+const apiClient = new ApiClient('cert', 'key', 'ca', axiosInstance);
+
 const secretsMock = mockClient(SecretsManagerClient);
 const parameterStoreMock = mockClient(SSMClient);
-const axiosMock = new MockAdapter(axios);
+const axiosMock = new MockAdapter(axiosInstance);
 
 Dotenv.config();
 if (process.env.VERBOSETESTS!='True') {
@@ -21,6 +24,10 @@ if (process.env.VERBOSETESTS!='True') {
   process.env.MTLS_ROOT_CA_NAME = 'testca';
 }
 
+beforeAll( async () => {
+  await apiClient.init();
+});
+
 beforeEach(() => {
   secretsMock.mockReset();
   parameterStoreMock.mockReset();
@@ -28,26 +35,6 @@ beforeEach(() => {
 });
 
 describe('Init', () => {
-  test('Init succeeds', async () => {
-    //required env params:
-
-    const secretsOutput: GetSecretValueCommandOutput = {
-      $metadata: {},
-      SecretString: 'test',
-    };
-    secretsMock.mockImplementation(() => secretsOutput);
-    const ssmOutput: GetParameterCommandOutput = {
-      $metadata: {},
-      Parameter: {
-        Value: 'test',
-      },
-    };
-    secretsMock.mockImplementation(() => secretsOutput);
-    parameterStoreMock.mockImplementation(() => ssmOutput);
-
-    const apiClient = new ApiClient();
-    await apiClient.init();
-  });
 
   test('Error getting secret', async () => {
     //required env params:
@@ -66,9 +53,9 @@ describe('Init', () => {
     secretsMock.mockImplementation(() => secretsOutput);
     parameterStoreMock.mockImplementation(() => ssmOutput);
 
-    const apiClient = new ApiClient();
+    const apiClientForError = new ApiClient();
     return expect(async () => {
-      return apiClient.init();
+      return apiClientForError.init();
     }).rejects.toThrow();
   });
   test('Without secret arn fails', async () => {
@@ -88,9 +75,9 @@ describe('Init', () => {
     secretsMock.mockImplementation(() => secretsOutput);
     parameterStoreMock.mockImplementation(() => ssmOutput);
 
-    const apiClient = new ApiClient();
+    const apiClientForSecretError = new ApiClient();
     return expect(async () => {
-      return apiClient.init();
+      return apiClientForSecretError.init();
     }).rejects.toThrow();
   });
 });
@@ -102,8 +89,6 @@ describe('postData Requests', () => {
     const returnData = { users: [{ id: 1, name: 'John Smith' }] };
     axiosMock.onPost('/test').reply(200, returnData);
 
-    const apiClient = new ApiClient();
-    await apiClient.init();
     const data = await apiClient.postData('/test', { data: 'test ' });
     expect(data).toEqual(returnData);
   });
@@ -113,8 +98,6 @@ describe('postData Requests', () => {
     testSetup();
     axiosMock.onPost('/test').timeout();
 
-    const apiClient = new ApiClient();
-    await apiClient.init();
     await expect(async() => {
       await apiClient.postData('/test', { data: 'test ' });
     }).rejects.toThrow();
@@ -132,8 +115,6 @@ describe('postData Requests', () => {
     testSetup();
     axiosMock.onPost('/test').networkError();
 
-    const apiClient = new ApiClient();
-    await apiClient.init();
     await expect(async() => {
       await apiClient.postData('/test', { data: 'test ' });
     }).rejects.toThrow();
@@ -145,6 +126,7 @@ describe('postData Requests', () => {
     }
     expect(result.message).toBe('Het ophalen van gegevens is misgegaan.');
   });
+
 });
 
 describe('Deprecated requestData Requests', () => {
@@ -154,8 +136,6 @@ describe('Deprecated requestData Requests', () => {
     const returnData = { users: [{ id: 1, name: 'John Smith' }] };
     axiosMock.onPost('/test').reply(200, returnData);
 
-    const apiClient = new ApiClient();
-    await apiClient.init();
     const data = await apiClient.postData('/test', { data: 'test ' });
     expect(data).toEqual(returnData);
   });
@@ -165,8 +145,6 @@ describe('Deprecated requestData Requests', () => {
     testSetup();
     axiosMock.onPost('/test').timeout();
 
-    const apiClient = new ApiClient();
-    await apiClient.init();
     await expect(async() => {
       await apiClient.postData('/test', { data: 'test ' });
     }).rejects.toThrow();
@@ -184,8 +162,6 @@ describe('Deprecated requestData Requests', () => {
     testSetup();
     axiosMock.onPost('/test').networkError();
 
-    const apiClient = new ApiClient();
-    await apiClient.init();
     await expect(async() => {
       await apiClient.postData('/test', { data: 'test ' });
     }).rejects.toThrow();
@@ -206,8 +182,6 @@ describe('GET Requests', () => {
     const returnData = { users: [{ id: 1, name: 'John Smith' }] };
     axiosMock.onGet('/test').reply(200, returnData);
 
-    const apiClient = new ApiClient();
-    await apiClient.init();
     const data = await apiClient.getData('/test');
     expect(data).toEqual(returnData);
   });
@@ -217,8 +191,6 @@ describe('GET Requests', () => {
     testSetup();
     axiosMock.onGet('/test').timeout();
 
-    const apiClient = new ApiClient();
-    await apiClient.init();
     await expect(async() => {
       await apiClient.getData('/test');
     }).rejects.toThrow();
@@ -236,8 +208,6 @@ describe('GET Requests', () => {
     testSetup();
     axiosMock.onGet('/test').networkError();
 
-    const apiClient = new ApiClient();
-    await apiClient.init();
     await expect(async() => {
       await apiClient.getData('/test', { data: 'test ' });
     }).rejects.toThrow();
