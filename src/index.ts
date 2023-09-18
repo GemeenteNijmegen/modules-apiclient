@@ -10,6 +10,7 @@ export class ApiClient {
   private cert: string | undefined;
   private ca: string | undefined;
   private axios: AxiosInstance;
+  private timeout: number = 2000;
   /**
    * Connects to API's. Use .post() or .get() to get the actual info
    *
@@ -36,6 +37,10 @@ export class ApiClient {
     }
   }
 
+  setTimeout(timeout: number) {
+    this.timeout = timeout;
+  }
+  
   /**
    * Init key, cert and ca. If you do not init, you can pass them in the constructor, or
    * they will be lazily initialized in the first requestData call
@@ -108,7 +113,7 @@ export class ApiClient {
       const response = await this.axios.post(endpoint, body, {
         httpsAgent: httpsAgent,
         headers,
-        timeout: 2000,
+        timeout: this.timeout,
       });
       console.timeEnd('request to ' + endpoint);
       return response.data;
@@ -125,7 +130,7 @@ export class ApiClient {
       const response = await this.axios.get(endpoint, {
         httpsAgent: httpsAgent,
         headers,
-        timeout: 2000,
+        timeout: this.timeout,
       });
       console.timeEnd('GET request to ' + endpoint);
       return response.data;
