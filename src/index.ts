@@ -1,7 +1,7 @@
 import https from 'https';
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 import { SSMClient, GetParameterCommand } from '@aws-sdk/client-ssm'; // ES Modules import
-import axios, { AxiosError } from 'axios';
+import axios, { AxiosError, AxiosInstance } from 'axios';
 
 export class ApiClient {
   private privatekey: string | undefined;
@@ -9,19 +9,31 @@ export class ApiClient {
   private caname: string | undefined;
   private cert: string | undefined;
   private ca: string | undefined;
+  private axios: AxiosInstance;
   /**
-   * Connects to API's. Use .requestData() to get the actual info
+   * Connects to API's. Use .post() or .get() to get the actual info
    *
    * @param {string|null} cert optional client cert, default is env variable MTLS_CLIENT_CERT
    * @param {string|null} key optional private key for client cert, default will get key from secret store
    * @param {string|null} ca optional root ca bundle to trust, default is env variable MTLS_ROOT_CA
   */
-  constructor(cert?: string, key?: string, ca?: string) {
+  constructor(cert?: string, key?: string, ca?: string, axiosInstance?: AxiosInstance) {
     this.privatekey = key;
     this.cert = cert;
     this.ca = ca;
     this.certname = process.env.MTLS_CLIENT_CERT_NAME ?? undefined;
     this.caname = process.env.MTLS_ROOT_CA_NAME ?? undefined;
+    this.axios = this.initAxios({ axiosInstance });
+  }
+
+  private initAxios(config: {
+    axiosInstance?: AxiosInstance | undefined;
+  }): AxiosInstance {
+    if (config.axiosInstance) {
+      return config.axiosInstance;
+    } else {
+      return axios.create();
+    }
   }
 
   /**
@@ -93,7 +105,7 @@ export class ApiClient {
     const httpsAgent = await this.setupAgent();
     console.time('request to ' + endpoint);
     try {
-      const response = await axios.post(endpoint, body, {
+      const response = await this.axios.post(endpoint, body, {
         httpsAgent: httpsAgent,
         headers,
         timeout: 2000,
@@ -110,7 +122,7 @@ export class ApiClient {
     const httpsAgent = await this.setupAgent();
     console.time('GET request to ' + endpoint);
     try {
-      const response = await axios.get(endpoint, {
+      const response = await this.axios.get(endpoint, {
         httpsAgent: httpsAgent,
         headers,
         timeout: 2000,
