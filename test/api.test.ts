@@ -107,7 +107,7 @@ describe('postData Requests', () => {
     } catch (error) {
       result = error;
     }
-    expect(result.message).toBe('Het ophalen van gegevens is misgegaan.');
+    expect(result.message).toBe('Het ophalen van gegevens duurt te lang.');
   });
 
   test('Network error', async () => {
@@ -154,7 +154,7 @@ describe('Deprecated requestData Requests', () => {
     } catch (error) {
       result = error;
     }
-    expect(result.message).toBe('Het ophalen van gegevens is misgegaan.');
+    expect(result.message).toBe('Het ophalen van gegevens duurt te lang.');
   });
 
   test('Network error', async () => {
@@ -200,7 +200,7 @@ describe('GET Requests', () => {
     } catch (error) {
       result = error;
     }
-    expect(result.message).toBe('Het ophalen van gegevens is misgegaan.');
+    expect(result.message).toBe('Het ophalen van gegevens duurt te lang.');
   });
 
   test('Network error', async () => {
