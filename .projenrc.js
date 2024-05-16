@@ -5,6 +5,7 @@ const projectName = '@gemeentenijmegen/apiclient';
 const project = new GemeenteNijmegenTsPackage({
   defaultReleaseBranch: 'main',
   name: projectName,
+  repository: 'https://github.com/GemeenteNijmegen/modules-apiclient.git',
   defaultReleaseBranch: 'main',
   depsUpgradeOptions: {
     workflowOptions: {
