@@ -13,9 +13,7 @@ const project = new GemeenteNijmegenTsPackage({
     },
   },
   deps: [
-    '@aws-sdk/client-secrets-manager',
     '@gemeentenijmegen/utils',
-    '@aws-sdk/client-ssm',
     'axios',
   ],
   devDeps: [
