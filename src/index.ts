@@ -1,9 +1,31 @@
 import https from 'https';
-import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
-import { SSMClient, GetParameterCommand } from '@aws-sdk/client-ssm'; // ES Modules import
+import { AWS } from '@gemeentenijmegen/utils';
 import axios, { AxiosError, AxiosInstance } from 'axios';
 
 export class ApiClient {
+
+  /**
+   * Helper function for creating an ApiClient from obtaining
+   * certificate, ca and private key from the AWS parameter store
+   * and secrets manager.
+   * @param ssmCert ssm name of the cert parameter
+   * @param ssmCa ssm name of the CA parameter
+   * @param arnKey ARN of the private key secret
+   * @returns
+   */
+  static async fromParameterStore(
+    ssmCert: string,
+    ssmCa: string,
+    arnKey: string,
+  ) {
+    const [cert, ca, key] = await Promise.all([
+      AWS.getParameter(ssmCert),
+      AWS.getParameter(ssmCa),
+      AWS.getSecret(arnKey),
+    ]);
+    return new ApiClient(cert, ca, key);
+  }
+
   private privatekey: string | undefined;
   private certname: string | undefined;
   private caname: string | undefined;
@@ -52,8 +74,8 @@ export class ApiClient {
 
     this.privatekey = await this.getPrivateKey();
     if (this.certname && this.caname) {
-      this.cert = this.cert ? this.cert : await this.getParameterValue(this.certname);
-      this.ca = this.ca ? this.ca : await this.getParameterValue(this.caname);
+      this.cert = this.cert ? this.cert : await AWS.getParameter(this.certname);
+      this.ca = this.ca ? this.ca : await AWS.getParameter(this.caname);
     }
   }
 
@@ -67,31 +89,12 @@ export class ApiClient {
       if (!process.env.MTLS_PRIVATE_KEY_ARN) {
         throw new Error('no secret arn provided');
       }
-      const secretsManagerClient = new SecretsManagerClient({});
-      const command = new GetSecretValueCommand({ SecretId: process.env.MTLS_PRIVATE_KEY_ARN });
-      const data = await secretsManagerClient.send(command);
-      // Depending on whether the secret is a string or binary, one of these fields will be populated.
-      if (data?.SecretString) {
-        this.privatekey = data.SecretString;
-      } else {
+      this.privatekey = await AWS.getSecret(process.env.MTLS_PRIVATE_KEY_ARN);
+      if (!this.privatekey) {
         throw new Error('No secret value found');
       }
     }
     return this.privatekey;
-  }
-
-  /**
-   * Get a parameter from parameter store. This is used
-   * as a workaround for the 4kb limit for environment variables.
-   *
-   * @param {string} name Name of the ssm param
-   * @returns param value
-   */
-  async getParameterValue(name: string) {
-    const client = new SSMClient({});
-    const command = new GetParameterCommand({ Name: name });
-    const response = await client.send(command);
-    return response?.Parameter?.Value;
   }
 
   /**
