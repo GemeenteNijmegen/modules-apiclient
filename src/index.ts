@@ -1,9 +1,33 @@
 import https from 'https';
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
 import { SSMClient, GetParameterCommand } from '@aws-sdk/client-ssm'; // ES Modules import
+import { AWS } from '@gemeentenijmegen/utils';
 import axios, { AxiosError, AxiosInstance } from 'axios';
 
 export class ApiClient {
+
+  /**
+   * Helper function for creating an ApiClient from obtaining
+   * certificate, ca and private key from the AWS parameter store
+   * and secrets manager.
+   * @param ssmCert ssm name of the cert parameter
+   * @param ssmCa ssm name of the CA parameter
+   * @param arnKey ARN of the private key secret
+   * @returns
+   */
+  static async fromParameterStore(
+    ssmCert: string,
+    ssmCa: string,
+    arnKey: string,
+  ) {
+    const [cert, ca, key] = await Promise.all([
+      AWS.getParameter(ssmCert),
+      AWS.getParameter(ssmCa),
+      AWS.getSecret(arnKey),
+    ]);
+    return new ApiClient(cert, ca, key);
+  }
+
   private privatekey: string | undefined;
   private certname: string | undefined;
   private caname: string | undefined;
