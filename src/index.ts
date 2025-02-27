@@ -23,7 +23,7 @@ export class ApiClient {
       AWS.getParameter(ssmCa),
       AWS.getSecret(arnKey),
     ]);
-    return new ApiClient(cert, ca, key);
+    return new ApiClient(cert, key, ca);
   }
 
   private privatekey: string | undefined;
