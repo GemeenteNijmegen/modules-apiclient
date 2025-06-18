@@ -25,7 +25,7 @@
     "projen": "npx projen"
   },
   "devDependencies": {
-    "@gemeentenijmegen/projen-project-type": "^1.10.4",
+    "@gemeentenijmegen/projen-project-type": "^1.10.5",
     "@stylistic/eslint-plugin": "^2",
     "@types/jest": "^29.5.14",
     "@types/node": "^16",
@@ -42,14 +42,14 @@
     "jest-aws-client-mock": "^0.0.26",
     "jest-junit": "^16",
     "projen": "^0.91.31",
-    "ts-jest": "^29.3.4",
+    "ts-jest": "^29.4.0",
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@aws-sdk/client-secrets-manager": "^3.812.0",
-    "@aws-sdk/client-ssm": "^3.812.0",
-    "@gemeentenijmegen/utils": "^0.0.31",
-    "axios": "^1.9.0"
+    "@aws-sdk/client-secrets-manager": "^3.830.0",
+    "@aws-sdk/client-ssm": "^3.830.0",
+    "@gemeentenijmegen/utils": "^0.0.32",
+    "axios": "^1.10.0"
   },
   "main": "lib/index.js",
   "license": "EUPL-1.2",
