@@ -2,7 +2,7 @@
   "name": "@gemeentenijmegen/apiclient",
   "repository": {
     "type": "git",
-    "url": "https://github.com/GemeenteNijmegen"
+    "url": "https://github.com/GemeenteNijmegen/modules-apiclient.git"
   },
   "scripts": {
     "build": "npx projen build",
@@ -25,30 +25,31 @@
     "projen": "npx projen"
   },
   "devDependencies": {
-    "@gemeentenijmegen/projen-project-type": "^1.5.6",
-    "@types/jest": "^29.5.12",
+    "@gemeentenijmegen/projen-project-type": "^1.11.2",
+    "@stylistic/eslint-plugin": "^2",
+    "@types/jest": "^29.5.14",
     "@types/node": "^16",
-    "@typescript-eslint/eslint-plugin": "^6",
-    "@typescript-eslint/parser": "^6",
+    "@typescript-eslint/eslint-plugin": "^8",
+    "@typescript-eslint/parser": "^8",
     "axios-mock-adapter": "^1.22.0",
-    "dotenv": "^16.4.5",
-    "eslint": "^8",
-    "eslint-import-resolver-node": "^0.3.9",
-    "eslint-import-resolver-typescript": "^3.6.1",
-    "eslint-plugin-import": "^2.29.1",
+    "commit-and-tag-version": "^12",
+    "constructs": "^10.0.0",
+    "dotenv": "^16.6.1",
+    "eslint": "^9",
+    "eslint-import-resolver-typescript": "^3.10.1",
+    "eslint-plugin-import": "^2.32.0",
     "jest": "^29.7.0",
     "jest-aws-client-mock": "^0.0.26",
-    "jest-junit": "^15",
-    "npm-check-updates": "^16",
-    "projen": "^0.73.23",
-    "standard-version": "^9",
-    "ts-jest": "^29.1.2",
-    "typescript": "^5.4.3"
+    "jest-junit": "^16",
+    "projen": "^0.94.2",
+    "ts-jest": "^29.4.1",
+    "typescript": "^5.9.2"
   },
   "dependencies": {
-    "@aws-sdk/client-secrets-manager": "^3.543.0",
-    "@aws-sdk/client-ssm": "^3.540.0",
-    "axios": "^1.6.8"
+    "@aws-sdk/client-secrets-manager": "^3.864.0",
+    "@aws-sdk/client-ssm": "^3.864.0",
+    "@gemeentenijmegen/utils": "^0.0.35",
+    "axios": "^1.11.0"
   },
   "main": "lib/index.js",
   "license": "EUPL-1.2",
@@ -57,9 +58,10 @@
   },
   "version": "0.0.0",
   "jest": {
+    "coverageProvider": "v8",
     "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.ts?(x)",
-      "<rootDir>/(test|src)/**/*(*.)@(spec|test).ts?(x)"
+      "<rootDir>/@(src|test)/**/*(*.)@(spec|test).ts?(x)",
+      "<rootDir>/@(src|test)/**/__tests__/**/*.ts?(x)"
     ],
     "clearMocks": true,
     "collectCoverage": true,
@@ -89,11 +91,13 @@
         }
       ]
     ],
-    "preset": "ts-jest",
-    "globals": {
-      "ts-jest": {
-        "tsconfig": "tsconfig.dev.json"
-      }
+    "transform": {
+      "^.+\\.[t]sx?$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.dev.json"
+        }
+      ]
     }
   },
   "types": "lib/index.d.ts",
