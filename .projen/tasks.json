@@ -32,15 +32,14 @@
         "CHANGELOG": "dist/changelog.md",
         "BUMPFILE": "dist/version.txt",
         "RELEASETAG": "dist/releasetag.txt",
-        "RELEASE_TAG_PREFIX": "",
-        "BUMP_PACKAGE": "commit-and-tag-version@^12"
+        "RELEASE_TAG_PREFIX": ""
       },
       "steps": [
         {
           "builtin": "release/bump-version"
         }
       ],
-      "condition": "git log --oneline -1 | grep -qv \"chore(release):\""
+      "condition": "! git log --oneline -1 | grep -q \"chore(release):\""
     },
     "clobber": {
       "name": "clobber",
@@ -107,13 +106,9 @@
     "eslint": {
       "name": "eslint",
       "description": "Runs eslint against the codebase",
-      "env": {
-        "ESLINT_USE_FLAT_CONFIG": "false"
-      },
       "steps": [
         {
-          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern $@ src test build-tools .projenrc.js",
-          "receiveArgs": true
+          "exec": "eslint --ext .ts,.tsx --fix --no-error-on-unmatched-pattern src test build-tools .projenrc.js"
         }
       ]
     },
@@ -143,7 +138,7 @@
           "exec": "mkdir -p dist/js"
         },
         {
-          "exec": "npm pack --pack-destination dist/js"
+          "exec": "mv $(npm pack) dist/js/"
         }
       ]
     },
@@ -214,8 +209,7 @@
         "CHANGELOG": "dist/changelog.md",
         "BUMPFILE": "dist/version.txt",
         "RELEASETAG": "dist/releasetag.txt",
-        "RELEASE_TAG_PREFIX": "",
-        "BUMP_PACKAGE": "commit-and-tag-version@^12"
+        "RELEASE_TAG_PREFIX": ""
       },
       "steps": [
         {
@@ -231,13 +225,16 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --no-deprecated --dep=dev,peer,prod,optional --filter=@gemeentenijmegen/projen-project-type,@types/jest,@types/node,axios-mock-adapter,dotenv,eslint-import-resolver-typescript,eslint-plugin-import,jest,jest-aws-client-mock,projen,ts-jest,typescript,@aws-sdk/client-secrets-manager,@aws-sdk/client-ssm,@gemeentenijmegen/utils,axios"
+          "exec": "yarn upgrade npm-check-updates"
+        },
+        {
+          "exec": "npm-check-updates --upgrade --target=minor --peer --dep=dev,peer,prod,optional --filter=@gemeentenijmegen/projen-project-type,@types/jest,@types/node,@typescript-eslint/eslint-plugin,@typescript-eslint/parser,axios-mock-adapter,dotenv,eslint-import-resolver-node,eslint-import-resolver-typescript,eslint-plugin-import,eslint,jest,jest-aws-client-mock,jest-junit,npm-check-updates,projen,standard-version,ts-jest,typescript,@aws-sdk/client-secrets-manager,@aws-sdk/client-ssm,@gemeentenijmegen/utils,axios"
         },
         {
           "exec": "yarn install --check-files"
         },
         {
-          "exec": "yarn upgrade @gemeentenijmegen/projen-project-type @stylistic/eslint-plugin @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser axios-mock-adapter commit-and-tag-version constructs dotenv eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-aws-client-mock jest-junit projen ts-jest typescript @aws-sdk/client-secrets-manager @aws-sdk/client-ssm @gemeentenijmegen/utils axios"
+          "exec": "yarn upgrade @gemeentenijmegen/projen-project-type @types/jest @types/node @typescript-eslint/eslint-plugin @typescript-eslint/parser axios-mock-adapter dotenv eslint-import-resolver-node eslint-import-resolver-typescript eslint-plugin-import eslint jest jest-aws-client-mock jest-junit npm-check-updates projen standard-version ts-jest typescript @aws-sdk/client-secrets-manager @aws-sdk/client-ssm @gemeentenijmegen/utils axios"
         },
         {
           "exec": "npx projen"

@@ -5,26 +5,22 @@
       "type": "build"
     },
     {
-      "name": "@stylistic/eslint-plugin",
-      "version": "^2",
-      "type": "build"
-    },
-    {
       "name": "@types/jest",
       "type": "build"
     },
     {
       "name": "@types/node",
+      "version": "^16",
       "type": "build"
     },
     {
       "name": "@typescript-eslint/eslint-plugin",
-      "version": "^8",
+      "version": "^6",
       "type": "build"
     },
     {
       "name": "@typescript-eslint/parser",
-      "version": "^8",
+      "version": "^6",
       "type": "build"
     },
     {
@@ -32,17 +28,11 @@
       "type": "build"
     },
     {
-      "name": "commit-and-tag-version",
-      "version": "^12",
-      "type": "build"
-    },
-    {
-      "name": "constructs",
-      "version": "^10.0.0",
-      "type": "build"
-    },
-    {
       "name": "dotenv",
+      "type": "build"
+    },
+    {
+      "name": "eslint-import-resolver-node",
       "type": "build"
     },
     {
@@ -55,7 +45,7 @@
     },
     {
       "name": "eslint",
-      "version": "^9",
+      "version": "^8",
       "type": "build"
     },
     {
@@ -68,11 +58,21 @@
     },
     {
       "name": "jest-junit",
+      "version": "^15",
+      "type": "build"
+    },
+    {
+      "name": "npm-check-updates",
       "version": "^16",
       "type": "build"
     },
     {
       "name": "projen",
+      "type": "build"
+    },
+    {
+      "name": "standard-version",
+      "version": "^9",
       "type": "build"
     },
     {
