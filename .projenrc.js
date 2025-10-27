@@ -26,5 +26,10 @@ const project = new GemeenteNijmegenTsPackage({
   ],
   packageName: projectName,
   enableAutoMergeDependencies: false, // No acceptance branche
+  tsconfig: {
+    compilerOptions: {
+      lib: ['ES2020', 'DOM'], // Axios DOM types fix
+    },
+  },
 });
 project.synth();
