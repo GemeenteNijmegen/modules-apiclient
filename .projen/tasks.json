@@ -232,7 +232,7 @@
       },
       "steps": [
         {
-          "exec": "npx npm-check-updates@16 --upgrade --target=minor --peer --no-deprecated --dep=dev,peer,prod,optional --filter=@gemeentenijmegen/projen-project-type,@types/jest,@types/node,axios-mock-adapter,dotenv,eslint-import-resolver-typescript,eslint-plugin-import,jest,jest-aws-client-mock,projen,ts-jest,typescript,@aws-sdk/client-secrets-manager,@aws-sdk/client-ssm,@gemeentenijmegen/utils,axios"
+          "exec": "npx npm-check-updates@18 --upgrade --target=minor --peer --no-deprecated --dep=dev,peer,prod,optional --filter=@gemeentenijmegen/projen-project-type,@types/jest,@types/node,axios-mock-adapter,dotenv,eslint-import-resolver-typescript,eslint-plugin-import,jest,jest-aws-client-mock,projen,ts-jest,typescript,@aws-sdk/client-secrets-manager,@aws-sdk/client-ssm,@gemeentenijmegen/utils,axios"
         },
         {
           "exec": "yarn install --check-files"
