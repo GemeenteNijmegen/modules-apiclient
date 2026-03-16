@@ -1,6 +1,6 @@
 import https from 'https';
 import { AWS } from '@gemeentenijmegen/utils';
-import axios, { AxiosError, AxiosInstance } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 
 export class ApiClient {
 
@@ -120,7 +120,7 @@ export class ApiClient {
       });
       console.timeEnd('request to ' + endpoint);
       return response.data;
-    } catch (error: any | AxiosError) {
+    } catch (error: any) {
       console.timeEnd('request to ' + endpoint);
       this.handleErrors(error, endpoint);
     }
@@ -137,7 +137,7 @@ export class ApiClient {
       });
       console.timeEnd('GET request to ' + endpoint);
       return response.data;
-    } catch (error: any | AxiosError) {
+    } catch (error: any) {
       console.timeEnd('GET request to ' + endpoint);
       this.handleErrors(error, endpoint);
     }
