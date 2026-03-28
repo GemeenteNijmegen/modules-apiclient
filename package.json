@@ -46,10 +46,10 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@aws-sdk/client-secrets-manager": "^3.1009.0",
-    "@aws-sdk/client-ssm": "^3.1009.0",
+    "@aws-sdk/client-secrets-manager": "^3.1019.0",
+    "@aws-sdk/client-ssm": "^3.1019.0",
     "@gemeentenijmegen/utils": "^0.0.38",
-    "axios": "^1.13.6"
+    "axios": "^1.14.0"
   },
   "main": "lib/index.js",
   "license": "EUPL-1.2",
