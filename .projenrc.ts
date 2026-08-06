@@ -1,12 +1,12 @@
-const { GemeenteNijmegenTsPackage } = require('@gemeentenijmegen/projen-project-type');
+import { GemeenteNijmegenTsPackage } from '@gemeentenijmegen/projen-project-type';
 
 const projectName = '@gemeentenijmegen/apiclient';
 
 const project = new GemeenteNijmegenTsPackage({
   defaultReleaseBranch: 'main',
   name: projectName,
+  projenrcTs: true,
   repository: 'https://github.com/GemeenteNijmegen/modules-apiclient.git',
-  defaultReleaseBranch: 'main',
   depsUpgradeOptions: {
     workflowOptions: {
       branches: ['main'], // No acceptance branche
